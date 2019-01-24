@@ -994,10 +994,18 @@ public class DefaultCodegen {
                         + "\tIn Property: " + p);
             }
             String inner = getSwaggerType(additionalProperties2);
+            // fix Array<T> bug
+            if (inner == "Array") {
+                inner = "Array<any>";
+            }
             return instantiationTypes.get("map") + "<String, " + inner + ">";
         } else if (p instanceof ArrayProperty) {
             ArrayProperty ap = (ArrayProperty) p;
             String inner = getSwaggerType(ap.getItems());
+            // fix Array<T> bug
+            if (inner == "Array") {
+                inner = "Array<any>";
+            }
             return instantiationTypes.get("array") + "<" + inner + ">";
         } else {
             return null;
