@@ -69,7 +69,12 @@ public class TypeScriptAngularJsClientCodegen extends AbstractTypeScriptClientCo
         }
 
         if (!isLanguagePrimitive(type) && !isLanguageGenericType(type)) {
-            type = "models." + swaggerType;
+            // fix bug
+            if (swaggerType.matches("^[a-zA-Z_$]\\S*$")) {
+                type = "models." + swaggerType;
+            } else {
+                type = swaggerType;
+            }
         }
         return type;
     }

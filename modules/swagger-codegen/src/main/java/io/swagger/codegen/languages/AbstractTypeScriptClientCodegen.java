@@ -30,7 +30,7 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
     private static final String X_DISCRIMINATOR_TYPE = "x-discriminator-value";
     private static final String UNDEFINED_VALUE = "undefined";
 
-    protected String modelPropertyNaming= "camelCase";
+    protected String modelPropertyNaming= "original";
     protected Boolean supportsES6 = true;
     protected HashSet<String> languageGenericTypes;
 
@@ -73,6 +73,8 @@ public abstract class AbstractTypeScriptClientCodegen extends DefaultCodegen imp
         ));
 
         instantiationTypes.put("array", "Array");
+        // fix null<x, y> bug
+        instantiationTypes.put("map", "Map");
 
         typeMapping = new HashMap<String, String>();
         typeMapping.put("Array", "Array");

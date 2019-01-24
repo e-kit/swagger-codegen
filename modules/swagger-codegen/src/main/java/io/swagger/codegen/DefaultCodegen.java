@@ -2324,6 +2324,9 @@ public class DefaultCodegen {
         }
         op.hasRequiredParams = op.requiredParams.size() > 0;
 
+        // only body
+        op.hasOnlyBodyParams = op.bodyParams.size() > 0 && op.pathParams.size() == 0 && op.queryParams.size() == 0 && op.headerParams.size() == 0 && op.formParams.size() == 0;
+
         // set Restful Flag
         op.isRestfulShow = op.isRestfulShow();
         op.isRestfulIndex = op.isRestfulIndex();
@@ -2332,7 +2335,8 @@ public class DefaultCodegen {
         op.isRestfulDestroy = op.isRestfulDestroy();
         op.isRestful = op.isRestful();
 
-        configureDataForTestTemplate(op);
+        // TODO: fix error with resolved yaml/json generators in order to enable this again.
+        //configureDataForTestTemplate(op);
 
         return op;
     }
