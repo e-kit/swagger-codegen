@@ -962,6 +962,7 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
             if (opIds.contains(opId)) {
                 counter++;
                 op.nickname += "_" + counter;
+                throw new RuntimeException("it's dangerous to overload \"" + op.nickname + "\",  with path " + op.path);
             }
             opIds.add(opId);
         }

@@ -3028,6 +3028,7 @@ public class DefaultCodegen {
             if(uniqueName.equals(op.operationId)) {
                 uniqueName = co.operationId + "_" + counter;
                 counter ++;
+                throw new RuntimeException("it's dangerous to overload \"" + op.nickname + "\",  with path " + op.path);
             }
         }
         if(!co.operationId.equals(uniqueName)) {
@@ -3823,6 +3824,7 @@ public class DefaultCodegen {
 
     public boolean convertPropertyToBoolean(String propertyKey) {
         boolean booleanValue = false;
+
         if (additionalProperties.containsKey(propertyKey)) {
             booleanValue = Boolean.valueOf(additionalProperties.get(propertyKey).toString());
         }
