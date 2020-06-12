@@ -409,9 +409,11 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
                         LOGGER.info("Skipped overwriting " + filename);
                         continue;
                     }
-                    File written = processTemplateToFile(models, templateName, filename);
-                    if (written != null) {
-                        files.add(written);
+                    if (System.getProperty("typeScriptDataFile") == null) {
+                        File written = processTemplateToFile(models, templateName, filename);
+                        if (written != null) {
+                            files.add(written);
+                        }
                     }
                 }
                 if (generateModelTests) {
@@ -503,9 +505,11 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
                         continue;
                     }
 
-                    File written = processTemplateToFile(operation, templateName, filename);
-                    if (written != null) {
-                        files.add(written);
+                    if (System.getProperty("typeScriptDataFile") == null) {
+                        File written = processTemplateToFile(operation, templateName, filename);
+                        if (written != null) {
+                            files.add(written);
+                        }
                     }
                 }
 
@@ -520,8 +524,10 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
                         }
 
                         File written = processTemplateToFile(operation, templateName, filename);
-                        if (written != null) {
-                            files.add(written);
+                        if (System.getProperty("typeScriptDataFile") == null) {
+                            if (written != null) {
+                                files.add(written);
+                            }
                         }
                     }
                 }
@@ -537,8 +543,10 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
                         }
 
                         File written = processTemplateToFile(operation, templateName, filename);
-                        if (written != null) {
-                            files.add(written);
+                        if (System.getProperty("typeScriptDataFile") == null) {
+                            if (written != null) {
+                                files.add(written);
+                            }
                         }
                     }
                 }
@@ -757,6 +765,18 @@ public class DefaultGenerator extends AbstractGenerator implements Generator {
         Map<String, Object> bundle = buildSupportFileBundle(allOperations, allModels);
         generateSupportingFiles(files, bundle);
         config.processSwagger(swagger);
+
+        String typeScriptDataFile = System.getProperty("typeScriptDataFile") != null && System.getProperty("typeScriptDataFile").isEmpty() ? "TypeScriptData.json" : System.getProperty("typeScriptDataFile");
+
+        if (typeScriptDataFile != null) {
+            try {
+                String modelsString = Json.pretty(allModels);
+                String operationsString = Json.pretty(allOperations);
+                writeToFile(config.outputFolder() + File.separator + typeScriptDataFile, "{\"models\": " + modelsString + ", \"operations\": " + operationsString + "}");
+            } catch (IOException e) {
+                throw new RuntimeException("Could not generate supporting file '" + typeScriptDataFile + "'", e);
+            }
+        }
         return files;
     }
 
